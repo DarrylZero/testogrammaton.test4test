@@ -29,9 +29,12 @@ dependencies {
     compileOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
     compileOnly 'com.steammachine.org:testogramaton.sdk:1.0.1'
     compile 'com.steammachine.org:common.utils:1.0.7'
-}
 
-dependencies {
+    testCompile 'com.steammachine.org:testogramaton.sdk:1.0.1'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.4.2'
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
+    testCompile 'org.junit.vintage:junit-vintage-engine:5.4.2'
+
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
     testCompileOnly 'org.projectlombok:lombok:1.18.12'

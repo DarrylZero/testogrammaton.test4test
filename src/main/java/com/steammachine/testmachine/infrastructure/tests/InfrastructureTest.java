@@ -1,5 +1,6 @@
 package com.steammachine.testmachine.infrastructure.tests;
 
+import com.steammachine.common.utils.commonutils.CommonUtils;
 import com.steammachine.testmachine.infrastructure.tests.factory.Infrastructure;
 import com.steammachine.testmachine.infrastructure.tests.factory.InfrastructureFactory;
 import lombok.Value;
@@ -45,14 +46,36 @@ class InfrastructureTest {
     private static final List<Triplet> TRIPLETS =
             Arrays.asList(
                     new Triplet("All zeroes", 0, 0, 0, null, false),
-                    new Triplet("difference is less than zero", 1, 2, 3, null, false),
-                    new Triplet("difference is less than zero", 3, 2, 1, null, false),
-                    new Triplet("one side is zero", 3, 3, 0, null, false),
-                    new Triplet("one side is less than zero", 3, 3, -1, null, false),
-                    new Triplet("all sides is less than zero", -3, -3, -1, null, false),
-                    new Triplet("correct calculation", 3, 4, 5, 6.0, true)
+                    new Triplet("Difference is less or equal than zero 1", 1, 2, 3, null, false),
+                    new Triplet("Difference is less or equal than zero 2", 2, 3, 1, null, false),
+                    new Triplet("Difference is less or equal than zero 3", 3, 2, 1, null, false),
+                    new Triplet("One side is zero", 3, 3, 0, null, false),
+                    new Triplet("One side is less than zero", 3, 3, -1, null, false),
+                    new Triplet("All sides is less than zero", -3, -3, -1, null, false),
+                    new Triplet("Correct calculation", 3, 4, 5, 6.0, true)
             );
 
+    private static final List<Triplet> SUM_TRIPLETS =
+            Arrays.asList(
+                    new Triplet("Difference is less or equal than zero 1", 1, 2, 3, null, false),
+                    new Triplet("Difference is less or equal than zero 2", 1, 3, 2, null, false),
+                    new Triplet("Difference is less or equal than zero 3", 2, 1, 3, null, false),
+                    new Triplet("Difference is less or equal than zero 4", 2, 3, 1, null, false),
+                    new Triplet("Difference is less or equal than zero 5", 3, 1, 2, null, false),
+                    new Triplet("Difference is less or equal than zero 6", 3, 1, 1, null, false));
+
+
+
+
+    @TestFactory
+    Stream<DynamicTest> testWrongDataAllCombinations() {
+        return SUM_TRIPLETS
+                .stream()
+                .map(trip -> dynamicTest(
+                        trip.getName(),
+                        () -> assertThrows(IllegalArgumentException.class,
+                                           () -> infra.triangleSquare(trip.getA(), trip.getB(), trip.getC()))));
+    }
 
     @TestFactory
     Stream<DynamicTest> testWrongData() {
@@ -78,7 +101,7 @@ class InfrastructureTest {
     @Test
     @DisplayName("Million times must be executed within 500 millis")
     void testTimeMeasure() {
-        Assertions.assertTimeout(Duration.of(500, ChronoUnit.MILLIS),
+        Assertions.assertTimeout(Duration.of(1000, ChronoUnit.MILLIS),
                                  () -> measureTime(() -> infra
                                          .triangleSquare(3100.0, 3100.0, 3100.0), 1000_000));
     }
